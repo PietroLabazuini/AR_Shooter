@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class WeaponsManager : MonoBehaviour, IPointerClickHandler
+public class WeaponsManager : MonoBehaviour, IPointerEnterHandler
 {
     [SerializeField]
     Gun[] guns;
@@ -21,14 +21,14 @@ public class WeaponsManager : MonoBehaviour, IPointerClickHandler
         }
     }
 
-    public void OnPointerClick(PointerEventData eventData)
+    public void OnPointerEnter(PointerEventData eventData)
     {
         int nextIndex = (currIndex + 1) % guns.Length;
-        Debug.Log(nextIndex +" "+ guns.Length);
         if (guns[nextIndex] != null)
         {
-            guns[currIndex].gameObject.SetActive(false);
+            guns[currIndex].Unequip();
             guns[nextIndex].gameObject.SetActive(true);
+            guns[nextIndex].Equip();
             currIndex = nextIndex;
         }
     }
