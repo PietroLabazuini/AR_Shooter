@@ -5,9 +5,10 @@ J'ai fixé plusieurs objectifs à atteindre pour construire une roadmap pour mon
 - 🕹️ Systèmes relatifs au joueur :
   - Implémentation des armes ✅
   - Animations de tir, de rechargement et de changement d'arme ⌛
+  - Implémentation d'une interface utilisateur pour téléphone ⌛
 
 - 🔫 Implémentation d'entités ennemies :
-  - Système de point de vie et de barre de vie ✅
+  - Système de points de vie et de barre de vie ✅
   - Implémentation des déplacements via NavMesh ⌛
   - Implémentation des comportements de tir ❌
 
