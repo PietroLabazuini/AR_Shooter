@@ -13,11 +13,11 @@ public class WeaponsManager : MonoBehaviour, IPointerEnterHandler
     {
         if (guns != null) 
         {
-            guns[currIndex].gameObject.SetActive(true);
-        }
-        for (int i = 1; i < guns.Length; i++)
-        {
-            guns[i].gameObject.SetActive(false);
+            guns[currIndex].TriggerEquip();
+            for (int i = 1; i < guns.Length; i++)
+            {
+                guns[i].gameObject.SetActive(false);
+            }
         }
     }
 
@@ -26,9 +26,9 @@ public class WeaponsManager : MonoBehaviour, IPointerEnterHandler
         int nextIndex = (currIndex + 1) % guns.Length;
         if (guns[nextIndex] != null)
         {
-            guns[currIndex].Unequip();
+            guns[currIndex].TriggerEquip();
             guns[nextIndex].gameObject.SetActive(true);
-            guns[nextIndex].Equip();
+            guns[nextIndex].TriggerEquip();
             currIndex = nextIndex;
         }
     }

@@ -42,10 +42,10 @@ AnimatorStateMachine:
     m_Position: {x: 220, y: 0, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 2460107135475653084}
-    m_Position: {x: 255, y: 65, z: 0}
+    m_Position: {x: 230, y: 80, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -6931107944665186271}
-    m_Position: {x: 290, y: 130, z: 0}
+    m_Position: {x: 160, y: 150, z: 0}
   m_ChildStateMachines: []
   m_AnyStateTransitions: []
   m_EntryTransitions:
@@ -64,7 +64,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: SwitchToRifle
+  m_Name: UnequipRifle
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions: []
@@ -77,7 +77,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: cf71e471e84d1b545aef26f5303f9268, type: 2}
+  m_Motion: {fileID: 7400000, guid: 7030faf373212504d9131de314b852f8, type: 2}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
@@ -244,7 +244,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: PutAwayRifle
+  m_Name: EquipRifle
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions: []
@@ -257,7 +257,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: 7030faf373212504d9131de314b852f8, type: 2}
+  m_Motion: {fileID: 7400000, guid: cf71e471e84d1b545aef26f5303f9268, type: 2}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 

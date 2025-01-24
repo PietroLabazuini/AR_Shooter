@@ -19,8 +19,7 @@ public abstract class Gun : MonoBehaviour
     protected float reloadTime;
     protected float fireTime;
     protected float bspeed;
-    protected float fireDelay;
-    protected float reloadDelay;
+    protected float delay;
 
     protected int currAmmo;
     protected int magSize;
@@ -29,6 +28,8 @@ public abstract class Gun : MonoBehaviour
     protected bool isReloading;
     protected bool isShooting;
     protected bool isSwitching;
+    protected bool isSwitchAnimPlaying;
+    public bool isEquipped;
     
     protected string reloadAnim;
     protected string shootAnim;
@@ -45,6 +46,8 @@ public abstract class Gun : MonoBehaviour
     protected void Update()
     {
         DisplayCurrentGunInfo();
+
+        Equip();
 
         Reload();
 
@@ -64,7 +67,7 @@ public abstract class Gun : MonoBehaviour
         if (!isSwitching)
         {
             isReloading = true;
-            reloadDelay = Time.time + reloadTime;
+            delay = Time.time + reloadTime;
             PlayAnimation(reloadAnim);
         }
     }
@@ -73,7 +76,7 @@ public abstract class Gun : MonoBehaviour
     {
         if (isReloading)
         {
-            if (reloadDelay < Time.time)
+            if (delay < Time.time)
             {
                 currAmmo = magSize;
                 isReloading = false;
@@ -88,17 +91,17 @@ public abstract class Gun : MonoBehaviour
             if (!isShooting)
             {
                 isShooting = true;
-                fireDelay = Time.time;
+                delay = Time.time;
             }
 
-            if(fireDelay <= Time.time)
+            if(delay <= Time.time)
             {
                 if (currAmmo > 0)
                 {
                     PlayAnimation(shootAnim);
                     ShootBullet();
                     currAmmo--;
-                    fireDelay += fireTime;
+                    delay += fireTime;
                 }
                 else
                 {
@@ -125,31 +128,49 @@ public abstract class Gun : MonoBehaviour
         }
     }
 
-    public void Equip()
+    public void TriggerEquip()
     {
-        isSwitching = true;
-        StartCoroutine("EquipCoroutine");
+        if (!isSwitching)
+        {
+            isSwitching = true;
+        }
     }
 
-    public void Unequip()
+    protected void Equip()
     {
-        isSwitching = true;
-        StartCoroutine("UnequipCoroutine");
-    }
-
-    protected IEnumerator EquipCoroutine()
-    {
-        PlayAnimation(equipAnim);
-        yield return _animator.GetCurrentAnimatorClipInfo(0).Length;
-        isSwitching = false;
-    }
-
-    protected IEnumerator UnequipCoroutine()
-    {
-        PlayAnimation(unequipAnim);
-        yield return _animator.GetCurrentAnimatorClipInfo(0).Length;
-        isSwitching = false;
-        gameObject.SetActive(false);
+        if (!isReloading && !isShooting && isSwitching)
+        {
+            if (!isSwitchAnimPlaying) 
+            {
+                string anim;
+                if (isEquipped)
+                {
+                    anim = unequipAnim;
+                }
+                else
+                {
+                    anim = equipAnim;
+                }
+                PlayAnimation(anim);
+                delay = Time.time + 1f;
+                isSwitchAnimPlaying = true;
+                
+            }
+            else
+            {
+                if (delay <= Time.time)
+                {
+                    isEquipped = !isEquipped;
+                    gameObject.SetActive(isEquipped);
+                    isSwitching = false;
+                    isSwitchAnimPlaying = false;
+                }
+                else
+                {
+                    Debug.Log("Playing anim");
+                }
+            }
+        }
     }
 
     protected void DisplayCurrentGunInfo()

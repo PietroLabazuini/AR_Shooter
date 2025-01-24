@@ -14,7 +14,7 @@ public class Rifle : Gun
         bspeed = 5;
         reloadAnim = "ReloadRifle";
         shootAnim = "ShootRifle";
-        equipAnim = "SwitchToRifle";
-        unequipAnim = "PutAwayRifle";
+        equipAnim = "EquipRifle";
+        unequipAnim = "UnequipRifle";
     }
 }

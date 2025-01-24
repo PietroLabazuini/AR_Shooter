@@ -32,4 +32,5 @@ public class EnemyNav : MonoBehaviour
         surface.BuildNavMesh();
         enemy.destination = player.transform.position;
     }
+
 }
