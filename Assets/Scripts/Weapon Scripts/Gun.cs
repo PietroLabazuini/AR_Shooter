@@ -10,20 +10,20 @@ public abstract class Gun : MonoBehaviour
     [SerializeField]
     protected GameObject _bulletSpawnpoint;
     [SerializeField]
-    protected Text _ammoDisplay;
+    protected Camera _player;
 
     protected Animator _animator;
     protected GameObject _gun;
 
     protected float damage;
     protected float reloadTime;
-    protected float fireTime;
+    protected float fireRate;
     protected float bspeed;
     protected float delay;
 
-    protected int currAmmo;
-    protected int magSize;
-    float alphaFactor = 1f;
+    public int currAmmo;
+    public int magSize;
+    
 
     protected bool isReloading;
     protected bool isShooting;
@@ -45,8 +45,6 @@ public abstract class Gun : MonoBehaviour
 
     protected void Update()
     {
-        DisplayCurrentGunInfo();
-
         Equip();
 
         Reload();
@@ -86,7 +84,19 @@ public abstract class Gun : MonoBehaviour
 
     protected void Shoot()
     {
-        if (!isReloading && !isSwitching && Input.touchCount > 0)
+        int touch = 0;
+        if (Application.isEditor)
+        {
+            if (Input.GetMouseButtonDown(0))
+            {
+                touch = 1;
+            }
+        }
+        else
+        {
+            touch = Input.touchCount;
+        }
+        if (!isReloading && !isSwitching && touch > 0)
         {
             if (!isShooting)
             {
@@ -98,10 +108,23 @@ public abstract class Gun : MonoBehaviour
             {
                 if (currAmmo > 0)
                 {
-                    PlayAnimation(shootAnim);
-                    ShootBullet();
+                    //PlayAnimation(shootAnim);
+                    _animator.SetTrigger("isShooting");
+                    if(Physics.Raycast(_player.transform.position, _player.transform.forward, out RaycastHit hit))
+                    {
+                        Enemy enemyhit = hit.transform.GetComponent<Enemy>();
+                        if (enemyhit != null)
+                        {
+                            enemyhit.Damage(damage);
+                        }
+                    }
+                    else
+                    {
+                        Debug.Log("Didn't hit");
+                    }
+                    //ShootBullet();
                     currAmmo--;
-                    delay += fireTime;
+                    delay += fireRate;
                 }
                 else
                 {
@@ -172,66 +195,4 @@ public abstract class Gun : MonoBehaviour
             }
         }
     }
-
-    protected void DisplayCurrentGunInfo()
-    {
-        _ammoDisplay.text = currAmmo.ToString();
-
-        if (currAmmo < 0.3f * magSize)
-        {
-            if (currAmmo == 0)
-            {
-                if (_ammoDisplay.color.a <= 0) { alphaFactor = 1f; }
-                else { if (_ammoDisplay.color.a >= 1) { alphaFactor = -1f; } }
-                float newAlpha = _ammoDisplay.color.a + (0.02f * alphaFactor);
-                _ammoDisplay.color = new Color(1, 0, 0, newAlpha);
-            }
-            else
-            {
-                _ammoDisplay.color = new Color(1, 0.7f, 0);
-            }
-        }
-        else
-        {
-            _ammoDisplay.color = Color.white;
-        }
-    }
-
-    /*
-     * OLD VERSION
-     * protected IEnumerator ShootCoroutine()
-    {
-        while (true)
-        {
-            if (isReloading)
-            {
-                PlayAnimation(reloadAnim);
-                isReloading = false;
-                yield return new WaitForSeconds(reloadTime);
-                currAmmo = magSize;
-            }
-            else
-            {
-                while (Input.touchCount > 0)
-                {
-                    Debug.Log("Shoot = " + Time.time);
-                    if (currAmmo > 0)
-                    {
-                        PlayAnimation(shootAnim);
-                        ShootBullet();
-                        currAmmo--;
-                        yield return new WaitForSeconds(fireTime);
-                    }
-                    else
-                    {
-                        //reload sound
-                        yield return null;
-                    }
-                }
-            }
-            yield return null;
-        }
-    }
-    */
-
 }

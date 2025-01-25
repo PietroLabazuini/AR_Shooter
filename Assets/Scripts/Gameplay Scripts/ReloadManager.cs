@@ -6,17 +6,10 @@ using UnityEngine.EventSystems;
 public class ReloadManager : MonoBehaviour, IPointerEnterHandler
 {
     [SerializeField]
-    Gun[] guns;
+    WeaponsManager _weaponsManager;
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        Debug.Log("Pointer click = "+ Time.frameCount);
-        foreach (var gun in guns)
-        {
-            if (gun != null && gun.isActiveAndEnabled) 
-            { 
-                gun.TriggerReload();
-            }
-        }
+        _weaponsManager.GetCurrentGun().TriggerReload();
     }
 }
