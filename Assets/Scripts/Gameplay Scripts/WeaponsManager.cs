@@ -1,9 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.EventSystems;
 
-public class WeaponsManager : MonoBehaviour, IPointerEnterHandler
+
+public class WeaponsManager : MonoBehaviour
 {
     [SerializeField]
     Gun[] guns;
@@ -15,16 +15,17 @@ public class WeaponsManager : MonoBehaviour, IPointerEnterHandler
     {
         if (guns != null) 
         {
-            //guns[currIndex].TriggerEquip();
+            guns[currIndex].TriggerEquip();
             _ammoDisplay.magSize = guns[currIndex].magSize;
             for (int i = 1; i < guns.Length; i++)
             {
                 guns[i].gameObject.SetActive(false);
             }
+            _ammoDisplay.DisplayGunIcon(guns[1%guns.Length]);
         }
     }
 
-    public void OnPointerEnter(PointerEventData eventData)
+    public void SwitchGun()
     {
         int nextIndex = (currIndex + 1) % guns.Length;
         if (guns[nextIndex] != null)
@@ -34,6 +35,7 @@ public class WeaponsManager : MonoBehaviour, IPointerEnterHandler
             guns[nextIndex].TriggerEquip();
             currIndex = nextIndex;
             _ammoDisplay.magSize = guns[currIndex].magSize;
+            _ammoDisplay.DisplayGunIcon(guns[currIndex + 1 % guns.Length]);
         }
     }
 

@@ -5,12 +5,15 @@ using UnityEngine.UI;
 
 public abstract class Gun : MonoBehaviour
 {
+    /*
     [SerializeField]
     protected GameObject _bulletPrefab;
     [SerializeField]
-    protected GameObject _bulletSpawnpoint;
+    protected GameObject _bulletSpawnpoint;*/
     [SerializeField]
     protected Camera _player;
+    [SerializeField]
+    public Sprite _icon;
 
     protected Animator _animator;
     protected GameObject _gun;
@@ -66,7 +69,7 @@ public abstract class Gun : MonoBehaviour
         {
             isReloading = true;
             delay = Time.time + reloadTime;
-            PlayAnimation(reloadAnim);
+            _animator.SetTrigger("isReloading");
         }
     }
 
@@ -74,7 +77,7 @@ public abstract class Gun : MonoBehaviour
     {
         if (isReloading)
         {
-            if (delay < Time.time)
+            if (delay <= Time.time)
             {
                 currAmmo = magSize;
                 isReloading = false;
@@ -84,7 +87,7 @@ public abstract class Gun : MonoBehaviour
 
     protected void Shoot()
     {
-        int touch = 0;
+        /*int touch = 0;
         if (Application.isEditor)
         {
             if (Input.GetMouseButtonDown(0))
@@ -95,8 +98,9 @@ public abstract class Gun : MonoBehaviour
         else
         {
             touch = Input.touchCount;
-        }
-        if (!isReloading && !isSwitching && touch > 0)
+        }*/
+
+        if (!isReloading && !isSwitching && Input.touchCount > 0)
         {
             if (!isShooting)
             {
@@ -106,9 +110,9 @@ public abstract class Gun : MonoBehaviour
 
             if(delay <= Time.time)
             {
+                //CAN SHOOT
                 if (currAmmo > 0)
                 {
-                    //PlayAnimation(shootAnim);
                     _animator.SetTrigger("isShooting");
                     if(Physics.Raycast(_player.transform.position, _player.transform.forward, out RaycastHit hit))
                     {
@@ -124,14 +128,13 @@ public abstract class Gun : MonoBehaviour
                     }
                     //ShootBullet();
                     currAmmo--;
-                    delay += fireRate;
+                    delay += 60/fireRate;
                 }
                 else
                 {
                     //empty magazine sound
                 }
             }
-            
         }
         else
         {
@@ -139,7 +142,7 @@ public abstract class Gun : MonoBehaviour
         }
     }
 
-    protected void ShootBullet()
+    /*protected void ShootBullet()
     {
         if (_bulletSpawnpoint != null)
         {
@@ -149,7 +152,7 @@ public abstract class Gun : MonoBehaviour
             Bullet bullet = bulletObject.AddComponent<Bullet>();
             bullet.damage = damage;
         }
-    }
+    }*/
 
     public void TriggerEquip()
     {
@@ -165,16 +168,7 @@ public abstract class Gun : MonoBehaviour
         {
             if (!isSwitchAnimPlaying) 
             {
-                string anim;
-                if (isEquipped)
-                {
-                    anim = unequipAnim;
-                }
-                else
-                {
-                    anim = equipAnim;
-                }
-                PlayAnimation(anim);
+                _animator.SetTrigger("isSwitching");
                 delay = Time.time + 1f;
                 isSwitchAnimPlaying = true;
                 
@@ -184,13 +178,9 @@ public abstract class Gun : MonoBehaviour
                 if (delay <= Time.time)
                 {
                     isEquipped = !isEquipped;
-                    gameObject.SetActive(isEquipped);
+                    //gameObject.SetActive(isEquipped);
                     isSwitching = false;
                     isSwitchAnimPlaying = false;
-                }
-                else
-                {
-                    Debug.Log("Playing anim");
                 }
             }
         }

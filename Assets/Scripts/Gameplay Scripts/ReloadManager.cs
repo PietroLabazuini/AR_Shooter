@@ -10,6 +10,7 @@ public class ReloadManager : MonoBehaviour, IPointerEnterHandler
 
     public void OnPointerEnter(PointerEventData eventData)
     {
+        Debug.Log("Reloading...");
         _weaponsManager.GetCurrentGun().TriggerReload();
     }
 }

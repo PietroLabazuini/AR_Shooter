@@ -9,6 +9,8 @@ public class AmmoDisplay : MonoBehaviour
     protected WeaponsManager _weaponsManager;
     [SerializeField]
     protected Text _ammoDisplay;
+    [SerializeField]
+    protected Image _weaponIconDisplay;
 
     float alphaFactor = 1f;
     public int magSize;
@@ -41,6 +43,14 @@ public class AmmoDisplay : MonoBehaviour
         else
         {
             _ammoDisplay.color = Color.white;
+        }
+    }
+
+    public void DisplayGunIcon(Gun nextGun)
+    {
+        if (_ammoDisplay != null)
+        {
+            _weaponIconDisplay.sprite = nextGun._icon;
         }
     }
 }
