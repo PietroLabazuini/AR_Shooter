@@ -65,7 +65,7 @@ public abstract class Gun : MonoBehaviour
 
     public void TriggerReload()
     {
-        if (!isSwitching)
+        if (isEquipped && !isSwitching)
         {
             isReloading = true;
             delay = Time.time + reloadTime;
@@ -100,12 +100,13 @@ public abstract class Gun : MonoBehaviour
             touch = Input.touchCount;
         }*/
 
-        if (!isReloading && !isSwitching && Input.touchCount > 0)
+        if (isEquipped && !isReloading && !isSwitching && Input.touchCount > 0)
         {
             if (!isShooting)
             {
                 isShooting = true;
                 delay = Time.time;
+                _animator.SetBool("isShooting", true);
             }
 
             if(delay <= Time.time)
@@ -113,7 +114,6 @@ public abstract class Gun : MonoBehaviour
                 //CAN SHOOT
                 if (currAmmo > 0)
                 {
-                    _animator.SetTrigger("isShooting");
                     if(Physics.Raycast(_player.transform.position, _player.transform.forward, out RaycastHit hit))
                     {
                         Enemy enemyhit = hit.transform.GetComponent<Enemy>();
@@ -133,13 +133,17 @@ public abstract class Gun : MonoBehaviour
                 else
                 {
                     //empty magazine sound
+                    _animator.SetBool("isShooting", false);
                 }
             }
         }
         else
         {
             isShooting = false;
+            _animator.SetBool("isShooting", false);
+            Debug.Log("Hi");
         }
+
     }
 
     /*protected void ShootBullet()
@@ -178,7 +182,6 @@ public abstract class Gun : MonoBehaviour
                 if (delay <= Time.time)
                 {
                     isEquipped = !isEquipped;
-                    //gameObject.SetActive(isEquipped);
                     isSwitching = false;
                     isSwitchAnimPlaying = false;
                 }

@@ -17,10 +17,6 @@ public class WeaponsManager : MonoBehaviour
         {
             guns[currIndex].TriggerEquip();
             _ammoDisplay.magSize = guns[currIndex].magSize;
-            for (int i = 1; i < guns.Length; i++)
-            {
-                guns[i].gameObject.SetActive(false);
-            }
             _ammoDisplay.DisplayGunIcon(guns[1%guns.Length]);
         }
     }
@@ -31,11 +27,11 @@ public class WeaponsManager : MonoBehaviour
         if (guns[nextIndex] != null)
         {
             guns[currIndex].TriggerEquip();
-            guns[nextIndex].gameObject.SetActive(true);
+            //guns[nextIndex].gameObject.SetActive(true);
             guns[nextIndex].TriggerEquip();
             currIndex = nextIndex;
             _ammoDisplay.magSize = guns[currIndex].magSize;
-            _ammoDisplay.DisplayGunIcon(guns[currIndex + 1 % guns.Length]);
+            _ammoDisplay.DisplayGunIcon(guns[(currIndex + 1) % guns.Length]);
         }
     }
 
