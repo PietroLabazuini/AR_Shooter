@@ -7,18 +7,15 @@ using Unity.AI.Navigation;
 
 public class EnemyNav : MonoBehaviour
 {
-    [SerializeField]
-    NavMeshSurface surface;
-    [SerializeField]
     GameObject player;
-    [SerializeField]
     NavMeshAgent enemy;
 
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        enemy = GetComponent<NavMeshAgent>();
+        player = GameObject.FindGameObjectsWithTag("Player")[0];
     }
 
     // Update is called once per frame
@@ -29,7 +26,6 @@ public class EnemyNav : MonoBehaviour
 
     void MoveTowardsPlayer()
     {
-        surface.BuildNavMesh();
         enemy.destination = player.transform.position;
     }
 

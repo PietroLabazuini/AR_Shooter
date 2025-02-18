@@ -141,7 +141,6 @@ public abstract class Gun : MonoBehaviour
         {
             isShooting = false;
             _animator.SetBool("isShooting", false);
-            Debug.Log("Hi");
         }
 
     }
