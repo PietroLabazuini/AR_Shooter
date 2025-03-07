@@ -5,21 +5,20 @@ using UnityEngine.UI;
 
 public abstract class Gun : MonoBehaviour
 {
-    /*
-    [SerializeField]
-    protected GameObject _bulletPrefab;
-    [SerializeField]
-    protected GameObject _bulletSpawnpoint;*/
+    #region VARIABLES
     [SerializeField]
     protected Camera _player;
+
     [SerializeField]
     public Sprite _icon;
 
     protected Animator _animator;
+
     protected GameObject _gun;
 
     protected float damage;
     protected float reloadTime;
+    protected float switchTime;
     protected float fireRate;
     protected float bspeed;
     protected float delay;
@@ -27,7 +26,6 @@ public abstract class Gun : MonoBehaviour
     public int currAmmo;
     public int magSize;
     
-
     protected bool isReloading;
     protected bool isShooting;
     protected bool isSwitching;
@@ -39,6 +37,7 @@ public abstract class Gun : MonoBehaviour
     protected string equipAnim;
     protected string unequipAnim;
     protected string currSwitchAnim;
+    #endregion
 
     protected void Start()
     {
@@ -55,14 +54,7 @@ public abstract class Gun : MonoBehaviour
         Shoot();
     }
 
-    protected virtual void PlayAnimation(string animationName)
-    {
-        if (_animator != null)
-        {
-            _animator.Play(animationName);
-        }
-    }
-
+    #region RELOAD
     public void TriggerReload()
     {
         if (isEquipped && !isSwitching)
@@ -84,22 +76,11 @@ public abstract class Gun : MonoBehaviour
             }
         }
     }
+    #endregion
 
+    #region SHOOT
     protected void Shoot()
     {
-        /*int touch = 0;
-        if (Application.isEditor)
-        {
-            if (Input.GetMouseButtonDown(0))
-            {
-                touch = 1;
-            }
-        }
-        else
-        {
-            touch = Input.touchCount;
-        }*/
-
         if (isEquipped && !isReloading && !isSwitching && Input.touchCount > 0)
         {
             if (!isShooting)
@@ -109,9 +90,10 @@ public abstract class Gun : MonoBehaviour
                 _animator.SetBool("isShooting", true);
             }
 
+            // Checking if the player can shoot (if it's the first bullet or if the previous one was fired)
             if(delay <= Time.time)
             {
-                //CAN SHOOT
+                //Checking if the gun still has ammo
                 if (currAmmo > 0)
                 {
                     if(Physics.Raycast(_player.transform.position, _player.transform.forward, out RaycastHit hit))
@@ -126,7 +108,6 @@ public abstract class Gun : MonoBehaviour
                     {
                         Debug.Log("Didn't hit");
                     }
-                    //ShootBullet();
                     currAmmo--;
                     delay += 60/fireRate;
                 }
@@ -144,25 +125,12 @@ public abstract class Gun : MonoBehaviour
         }
 
     }
+    #endregion
 
-    /*protected void ShootBullet()
-    {
-        if (_bulletSpawnpoint != null)
-        {
-            GameObject bulletObject = Instantiate(_bulletPrefab, _bulletSpawnpoint.transform);
-            bulletObject.transform.parent = null;
-            bulletObject.GetComponent<Rigidbody>().velocity = bspeed * -_bulletSpawnpoint.transform.forward;
-            Bullet bullet = bulletObject.AddComponent<Bullet>();
-            bullet.damage = damage;
-        }
-    }*/
-
+    #region EQUIP
     public void TriggerEquip()
     {
-        if (!isSwitching)
-        {
-            isSwitching = true;
-        }
+        isSwitching = true;
     }
 
     protected void Equip()
@@ -187,4 +155,15 @@ public abstract class Gun : MonoBehaviour
             }
         }
     }
+    #endregion
+
+    #region UTILS
+    protected virtual void PlayAnimation(string animationName)
+    {
+        if (_animator != null)
+        {
+            _animator.Play(animationName);
+        }
+    }
+    #endregion
 }

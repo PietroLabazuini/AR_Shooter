@@ -6,10 +6,22 @@ using UnityEngine.UI;
 public class EnemyHealth : MonoBehaviour
 {
     [SerializeField]
-    Image healthBar;
+    Image _healthBar;
+    [SerializeField]
+    GameObject _axis;
+
+    GameObject player;
+    private void Start()
+    {
+        player = GameObject.FindGameObjectsWithTag("Player")[0];
+    }
+    void Update()
+    {
+        _axis.gameObject.transform.LookAt(player.transform.position);
+    }
 
     public void UpdateHealthBar(float currHealth)
     {
-        healthBar.fillAmount = currHealth;
+        _healthBar.fillAmount = currHealth;
     }
 }
