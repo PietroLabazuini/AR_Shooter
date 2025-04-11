@@ -8,7 +8,7 @@ public class Rifle : Gun
     {
         damage = 15f;
         reloadTime = 1.5f;
-        fireRate = 700f;
+        fireRate = 600f;
         magSize = 25;
         currAmmo = 25; 
         bspeed = 5;

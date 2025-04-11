@@ -3,22 +3,25 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.UI;
 
 public class EnemySpawner : MonoBehaviour
 {
     [SerializeField]
     GameObject _enemyPrefab;
     LineRenderer _lineRenderer;
-
+    [SerializeField]
+    Text _buttonText;
+    [SerializeField]
     NavMeshHandler _runtimeBaker;
     private IEnumerator spawnCoroutine;
 
-    bool spawning;
+    public bool spawning;
 
     public float min_X, max_X, min_Z, max_Z;
     void Start()
     {
-        _runtimeBaker = GetComponent<NavMeshHandler>();
+        //_runtimeBaker = GetComponent<NavMeshHandler>();
         _lineRenderer = GetComponent<LineRenderer>();
 
         min_X = -5f;
@@ -47,7 +50,10 @@ public class EnemySpawner : MonoBehaviour
     void SpawnEnemy()
     {
         Vector3 spawnPosition = _runtimeBaker.GetRandomPoint(min_X, max_X, min_Z, max_Z);
-        Instantiate(_enemyPrefab, spawnPosition, Quaternion.identity);
+        if (spawnPosition != Vector3.zero)
+        {
+            Instantiate(_enemyPrefab, spawnPosition, Quaternion.identity);
+        }
     }
 
     void DrawSpawnZone()
@@ -65,11 +71,14 @@ public class EnemySpawner : MonoBehaviour
         if (!spawning)
         {
             StartCoroutine(spawnCoroutine);
+            _buttonText.text = "Stop";
         }
         else
         {
             StopCoroutine(spawnCoroutine);
+            _buttonText.text = "Start";
         }
+        spawning = !spawning;
     }
     
 }

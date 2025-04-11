@@ -9,7 +9,7 @@ public class EnemyNav : MonoBehaviour
 {
     GameObject player;
     NavMeshAgent enemy;
-
+    public int agentId;
 
     // Start is called before the first frame update
     void Start()
@@ -29,4 +29,8 @@ public class EnemyNav : MonoBehaviour
         enemy.destination = player.transform.position;
     }
 
+    public void ChangeAgentType()
+    {
+        enemy.agentTypeID = agentId;
+    }
 }

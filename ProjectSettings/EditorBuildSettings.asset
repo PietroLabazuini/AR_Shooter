@@ -11,6 +11,12 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/App.unity
     guid: cad288b551a532344992f4053a382314
+  - enabled: 0
+    path: Assets/Scenes/AR_Testing.unity
+    guid: c2332d011fff7a84f82d03094b07a93d
+  - enabled: 1
+    path: Assets/Scenes/BasicNavMesh.unity
+    guid: c477a7c7a73adb74891d56395c9247f8
   m_configObjects:
     UnityEditor.XR.ARCore.ARCoreSettings: {fileID: 11400000, guid: 6ee72d15cf39dd748a13eac57397b9af,
       type: 2}

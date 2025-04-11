@@ -51,7 +51,7 @@ public abstract class Gun : MonoBehaviour
 
         Reload();
 
-        Shoot();
+        TryShoot();
     }
 
     #region RELOAD
@@ -79,51 +79,65 @@ public abstract class Gun : MonoBehaviour
     #endregion
 
     #region SHOOT
-    protected void Shoot()
+    protected void TryShoot()
     {
-        if (isEquipped && !isReloading && !isSwitching && Input.touchCount > 0)
+        if(isEquipped && !isSwitching && !isReloading)
         {
-            if (!isShooting)
+            if(Input.touchCount > 0)
             {
-                isShooting = true;
-                delay = Time.time;
-                _animator.SetBool("isShooting", true);
-            }
-
-            // Checking if the player can shoot (if it's the first bullet or if the previous one was fired)
-            if(delay <= Time.time)
-            {
-                //Checking if the gun still has ammo
-                if (currAmmo > 0)
+                Touch touch = Input.GetTouch(0);
+                switch (touch.phase)
                 {
-                    if(Physics.Raycast(_player.transform.position, _player.transform.forward, out RaycastHit hit))
-                    {
-                        Enemy enemyhit = hit.transform.GetComponent<Enemy>();
-                        if (enemyhit != null)
+                    case TouchPhase.Began:
+                        if (delay <= Time.time)
                         {
-                            enemyhit.Damage(damage);
+                            delay = Time.time;
+                            Shoot();
                         }
-                    }
-                    else
-                    {
-                        Debug.Log("Didn't hit");
-                    }
-                    currAmmo--;
-                    delay += 60/fireRate;
-                }
-                else
-                {
-                    //empty magazine sound
-                    _animator.SetBool("isShooting", false);
+                        break;
+                    case TouchPhase.Stationary:
+                        if (delay <= Time.time)
+                        {
+                            Shoot();
+                        }
+                        break;
+                    case TouchPhase.Ended:
+                        _animator.SetBool("isShooting", false);
+                        break;
+                    default:
+                        break;
+
                 }
             }
         }
+    }
+
+    private void Shoot()
+    {
+        //Checking if the gun still has ammo
+        if (currAmmo > 0)
+        {
+            _animator.SetBool("isShooting", true);
+            if (Physics.Raycast(_player.transform.position, _player.transform.forward, out RaycastHit hit))
+            {
+                if (hit.transform.TryGetComponent<Enemy>(out var enemyhit))
+                {
+                    enemyhit.Damage(damage);
+                    Handheld.Vibrate();
+                }
+            }
+            else
+            {
+                Debug.Log("Didn't hit");
+            }
+            currAmmo--;
+            delay += 60 / fireRate;
+            }
         else
         {
-            isShooting = false;
+            //empty magazine sound
             _animator.SetBool("isShooting", false);
         }
-
     }
     #endregion
 
